@@ -1,0 +1,47 @@
+// function openModalWindow(item) {
+//   item.addEventListener("click", () => {})
+// }
+
+// const editButton = document.querySelector(".profile__edit-button");
+// editButton.addEventListener("click", )
+
+// @todo: Открытие и закрытие модального окна
+// function openAndCloseModal (item, closeModal) {
+//   const chosenButton = (buttonDown) => {
+//     if (chosenButton === ) {
+//       const popupTypeEdit = document.querySelector(".popup_type_edit");
+//       const popupTypeNewCard = document.querySelector(".popup_type_new-card");
+//       const popupTypeImage = document.querySelector(".popup_type_image");
+
+//       chosenButton.classList.add('popup_is-opened')
+//     }
+//   }
+// }
+
+// @todo: Открытие и закрытие модального окна
+// // @todo: Открытие окна редактирования
+// const editButton = document.querySelector(".profile__edit-button");
+// editButton.addEventListener("click", () => {
+//   const popupEdit = document.querySelector(".popup_type_edit");
+//   popupEdit.classList.add("popup_is-opened");
+// });
+
+// // @todo Открытие окна добавления карточки
+// const profileAddButton = document.querySelector(".profile__add-button");
+// profileAddButton.addEventListener("click", () => {
+//   const popupAdd = document.querySelector(".popup_type_new-card");
+//   popupAdd.classList.add("popup_is-opened");
+// });
+
+// // @todo Открытие окна картинки
+// const profileImage = document.querySelector(".profile__image");
+// profileImage.addEventListener("click", () => {
+//   const popupImage = document.querySelector(".popup_type_image");
+//   popupImage.classList.add("popup_is-opened");
+// });
+
+// closePopupButton.addEventListener("click", () => {
+//   document
+//     .querySelector(".popup_is-opened")
+//     .classList.remove("popup_is-opened");
+// });
