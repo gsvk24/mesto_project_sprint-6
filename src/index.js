@@ -1,6 +1,11 @@
 import initialCards from "./scripts/cards";
 import "./pages/index.css";
 
+// Форма редактирования профиля
+const editProfileForm = document.querySelector('form[name="edit-profile"]');
+// Форма добавления карточки
+const addCardForm = document.querySelector('form[name="new-place"]');
+
 // @todo: Темплейт карточки
 const template = document.getElementById("card-template");
 
@@ -41,6 +46,7 @@ function openPopup(buttonSelector, popupSelector) {
   button.addEventListener("click", () => {
     const popup = document.querySelector(popupSelector);
     popup.classList.add("popup_is-opened");
+    populateEditForm();
   });
 
   // Закрытие попапа кликом на 'Escape'
@@ -79,3 +85,81 @@ openPopup(".profile__image", ".popup_type_image");
     }
   });
 })();
+
+// @todo 4: Редактирование имени и информации о себе
+
+// Заполнение формы элементами страницы
+
+function populateEditForm() {
+  const profileName = document.querySelector(".profile__title");
+  const profileDescription = document.querySelector(".profile__description");
+
+  const nameInput = document.querySelector(
+    'form[name="edit-profile"] [name="name"]',
+  );
+  const descriptionInput = document.querySelector(
+    'form[name="edit-profile"] [name="description"]',
+  );
+
+  if (profileName && profileDescription && nameInput && descriptionInput) {
+    nameInput.value = profileName.textContent;
+    descriptionInput.value = profileDescription.textContent;
+  }
+}
+
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+
+  // Ищем поля внутри текущей формы
+  const nameInput = evt.target.querySelector(".popup__input_type_name");
+  const jobInput = evt.target.querySelector(".popup__input_type_description");
+
+  const nameInputValue = nameInput.value;
+  const jobInputValue = jobInput.value;
+
+  const profileTitle = document.querySelector(".profile__title");
+  const profileDescription = document.querySelector(".profile__description");
+
+  profileTitle.textContent = nameInputValue;
+  profileDescription.textContent = jobInputValue;
+
+  const openedPopup = document.querySelector(".popup_is-opened");
+  if (openedPopup) {
+    openedPopup.classList.remove("popup_is-opened");
+  }
+}
+
+editProfileForm.addEventListener("submit", handleFormSubmit);
+
+// todo 6: Добавление карточки
+
+function createCard(evt) {
+  evt.preventDefault();
+
+  const placeNameInput = evt.target.querySelector(
+    ".popup__input_type_card-name",
+  );
+  const pictureUrlInput = evt.target.querySelector(".popup__input_type_url");
+
+  const placeNameValue = placeNameInput.value.trim();
+  const pictureUrlValue = pictureUrlInput.value.trim();
+
+  const newCard = {
+    name: placeNameValue,
+    link: pictureUrlValue,
+  };
+
+  initialCards.unshift(newCard);
+
+  const cardElement = addCard(newCard, deleteCard);
+  list.prepend(cardElement);
+
+  const openedPopup = document.querySelector(".popup_is-opened");
+  if (openedPopup) {
+    openedPopup.classList.remove("popup_is-opened");
+  }
+
+  evt.target.reset();
+}
+
+addCardForm.addEventListener("submit", createCard);

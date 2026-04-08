@@ -1,5 +1,3 @@
-// import cardDeleteIcon from "../images/delete-icon.svg";
-
 const initialCards = [
   {
     name: "Архыз",
@@ -26,12 +24,5 @@ const initialCards = [
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
   },
 ];
-
-// const cardButtonsImages = [
-//   {
-//     name: "Card Delete Icon",
-//     link: cardDeleteIcon,
-//   },
-// ];
 
 export default initialCards;
