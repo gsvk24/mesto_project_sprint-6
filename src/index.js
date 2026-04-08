@@ -13,20 +13,33 @@ const template = document.getElementById("card-template");
 const list = document.querySelector(".places__list");
 
 // @todo: Функция создания карточки
-function addCard(item, deleteCard) {
+function addCard(item, deleteCard, likeCard) {
   const templateCopy = template.content.querySelector(".card").cloneNode(true);
 
   const cardHeading = templateCopy.querySelector(".card__title");
   const cardLink = templateCopy.querySelector(".card__image");
   const deleteButton = templateCopy.querySelector(".card__delete-button");
+  const likeButton = templateCopy.querySelector(".card__like-button");
 
   cardHeading.textContent = item.name;
   cardLink.setAttribute("src", item.link);
   cardLink.setAttribute("alt", item.alt);
 
+  if (likeButton && typeof likeCard === "function") {
+    likeButton.addEventListener("click", () => likeCard(likeButton));
+  } else {
+    console.error("likeCard is not a function or likeButton not found", {
+      likeCard,
+      likeButton,
+    });
+  }
   deleteButton.addEventListener("click", () => deleteCard(templateCopy));
   return templateCopy;
 }
+
+const likeCard = (likeButton) => {
+  likeButton.classList.toggle("card__like-button_is-active");
+};
 
 // @todo: Функция удаления карточки
 const deleteCard = (card) => {
@@ -35,7 +48,7 @@ const deleteCard = (card) => {
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (item) {
-  list.append(addCard(item, deleteCard));
+  list.append(addCard(item, deleteCard, likeCard));
 });
 
 // @todo 3: Работа модальных окон
@@ -151,7 +164,7 @@ function createCard(evt) {
 
   initialCards.unshift(newCard);
 
-  const cardElement = addCard(newCard, deleteCard);
+  const cardElement = addCard(newCard, deleteCard, likeCard);
   list.prepend(cardElement);
 
   const openedPopup = document.querySelector(".popup_is-opened");
@@ -163,3 +176,5 @@ function createCard(evt) {
 }
 
 addCardForm.addEventListener("submit", createCard);
+
+// todo 7: Лайк карточки
