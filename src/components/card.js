@@ -1,77 +1,57 @@
-import { openImage } from "../index.js";
-import initialCards from "../scripts/cards.js";
-import { addCardForm } from "../index.js";
-import { list } from "../index.js";
-
-// @todo: Темплейт карточки
 const template = document.getElementById("card-template");
-// @todo: Функция создания карточки
 
-function addCard(item, deleteCard, likeCard, openImage) {
-  const templateCopy = template.content.querySelector(".card").cloneNode(true);
-  const cardHeading = templateCopy.querySelector(".card__title");
-  const cardLink = templateCopy.querySelector(".card__image");
-  const deleteButton = templateCopy.querySelector(".card__delete-button");
-  const likeButton = templateCopy.querySelector(".card__like-button");
-  const viewImage = templateCopy.querySelector(".card__image");
+export function addCard(
+  item,
+  deleteCardCallback,
+  likeCardCallback,
+  openImageCallback,
+) {
+  const cardElement = template.content.querySelector(".card").cloneNode(true);
+  const title = cardElement.querySelector(".card__title");
+  const image = cardElement.querySelector(".card__image");
+  const deleteBtn = cardElement.querySelector(".card__delete-button");
+  const likeBtn = cardElement.querySelector(".card__like-button");
 
-  cardHeading.textContent = item.name;
-  cardLink.setAttribute("src", item.link);
-  cardLink.setAttribute("alt", item.alt);
+  title.textContent = item.name;
+  image.src = item.link;
+  image.alt = item.alt;
 
-  if (likeButton) {
-    likeButton.addEventListener("click", () => likeCard(likeButton));
-  }
-  deleteButton.addEventListener("click", () => deleteCard(templateCopy));
+  likeBtn.addEventListener("click", () => likeCardCallback(likeBtn));
+  deleteBtn.addEventListener("click", () => deleteCardCallback(cardElement));
+  image.addEventListener("click", () => openImageCallback(cardElement));
 
-  viewImage.addEventListener("click", () => openImage(templateCopy));
-  return templateCopy;
+  return cardElement;
 }
 
-// @todo 7: Лайк карточки
-const likeCard = (likeButton) => {
+export const likeCard = (likeButton) => {
   likeButton.classList.toggle("card__like-button_is-active");
 };
 
-// @todo: Функция удаления карточки
-const deleteCard = (card) => {
+export const deleteCard = (card) => {
   card.remove();
 };
 
-// @todo 6: Добавление карточки
-
-function createCard(evt) {
+export function createCard(evt, list, openImage) {
   evt.preventDefault();
 
-  const placeNameInput = evt.target.querySelector(
-    ".popup__input_type_card-name",
-  );
-  const pictureUrlInput = evt.target.querySelector(".popup__input_type_url");
-
-  const placeNameValue = placeNameInput.value.trim();
-  const pictureUrlValue = pictureUrlInput.value.trim();
+  const nameInput = evt.target.querySelector(".popup__input_type_card-name");
+  const urlInput = evt.target.querySelector(".popup__input_type_url");
 
   const newCard = {
-    name: placeNameValue,
-    link: pictureUrlValue,
+    name: nameInput.value.trim(),
+    link: urlInput.value.trim(),
   };
-
-  initialCards.unshift(newCard);
 
   const cardElement = addCard(newCard, deleteCard, likeCard, openImage);
   list.prepend(cardElement);
 
-  const openedPopup = document.querySelector(".popup_is-opened");
-  if (openedPopup) {
-    openedPopup.classList.remove("popup_is-opened");
+  const popup = document.querySelector(".popup_is-opened");
+  if (popup) {
+    popup.classList.remove("popup_is-opened");
     setTimeout(() => {
-      openedPopup.classList.remove("popup_is-animated");
+      popup.classList.remove("popup_is-animated");
     }, 700);
   }
 
   evt.target.reset();
 }
-
-addCardForm.addEventListener("submit", createCard);
-
-export { addCard, createCard };

@@ -1,8 +1,4 @@
-import editProfileForm from "../index";
-// @todo 3: Работа модальных окон
-// Открытие модального окна редактирования
-
-function openModal(buttonSelector, popupSelector) {
+export function openModal(buttonSelector, popupSelector) {
   const button = document.querySelector(buttonSelector);
   button.addEventListener("click", () => {
     const popup = document.querySelector(popupSelector);
@@ -10,33 +6,9 @@ function openModal(buttonSelector, popupSelector) {
     setTimeout(() => {
       popup.classList.add("popup_is-opened");
     }, 1);
-    removeDarkBackgroundStyle();
     populateEditForm();
   });
 }
-
-openModal(".profile__edit-button", ".popup_type_edit");
-openModal(".profile__add-button", ".popup_type_new-card");
-
-// Закрытие модального окна
-function closeModal() {
-  const closePopupButtons = document.querySelectorAll(".popup__close");
-
-  closePopupButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const popup = button.closest(".popup");
-      removeDarkBackgroundStyle();
-      popup.classList.remove("popup_is-opened");
-      setTimeout(() => {
-        popup.classList.remove("popup_is-animated");
-      }, 700);
-    });
-  });
-}
-
-// @todo 4: Редактирование имени и информации о себе
-
-// Заполнение формы элементами страницы
 
 function populateEditForm() {
   const profileName = document.querySelector(".profile__title");
@@ -55,31 +27,59 @@ function populateEditForm() {
   }
 }
 
-function handleFormSubmit(evt) {
-  evt.preventDefault();
-
-  // Ищем поля внутри текущей формы
-  const nameInput = evt.target.querySelector(".popup__input_type_name");
-  const jobInput = evt.target.querySelector(".popup__input_type_description");
-
-  const nameInputValue = nameInput.value;
-  const jobInputValue = jobInput.value;
-
-  const profileTitle = document.querySelector(".profile__title");
-  const profileDescription = document.querySelector(".profile__description");
-
-  profileTitle.textContent = nameInputValue;
-  profileDescription.textContent = jobInputValue;
-
-  const openedPopup = document.querySelector(".popup_is-opened");
-  if (openedPopup) {
-    openedPopup.classList.remove("popup_is-opened");
-    setTimeout(() => {
-      openedPopup.classList.remove("popup_is-animated");
-    }, 700);
-  }
+export function closeModal() {
+  const closeButtons = document.querySelectorAll(".popup__close");
+  closeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const popup = button.closest(".popup");
+      removeDarkBackgroundStyle();
+      popup.classList.remove("popup_is-opened");
+      setTimeout(() => {
+        popup.classList.remove("popup_is-animated");
+      }, 600);
+    });
+  });
 }
 
-editProfileForm.addEventListener("submit", handleFormSubmit);
+export function addDarkBackgroundStyle() {
+  if (document.getElementById("popup-dark-bg-style")) return;
 
-export { openModal, closeModal };
+  const style = document.createElement("style");
+  style.id = "popup-dark-bg-style";
+  style.textContent = `
+    .popup_type_image.popup_is-opened {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+export function removeDarkBackgroundStyle() {
+  const style = document.getElementById("popup-dark-bg-style");
+  if (style) style.remove();
+}
+
+export function setupGlobalCloseHandlers() {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      document.querySelectorAll(".popup_is-opened").forEach((popup) => {
+        removeDarkBackgroundStyle();
+        popup.classList.remove("popup_is-opened");
+        setTimeout(() => {
+          popup.classList.remove("popup_is-animated");
+        }, 600);
+      });
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const popup = event.target.closest(".popup_is-opened");
+    if (popup && !event.target.closest(".popup__content")) {
+      removeDarkBackgroundStyle();
+      popup.classList.remove("popup_is-opened");
+      setTimeout(() => {
+        popup.classList.remove("popup_is-animated");
+      }, 600);
+    }
+  });
+}
