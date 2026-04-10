@@ -50,7 +50,30 @@ const openImage = (cardElement) => {
   popupImageDescription.textContent = cardDescription.textContent;
 
   popup.classList.add("popup_is-opened");
+  addDarkBackgroundStyle();
 };
+
+function addDarkBackgroundStyle() {
+  if (document.getElementById("popup-dark-bg-style")) {
+    return;
+  }
+
+  const styleElement = document.createElement("style");
+  styleElement.id = "popup-dark-bg-style";
+  styleElement.textContent = `
+    .popup_type_image.popup_is-opened {
+      background-color: rgba(0, 0, 0, 0.9) !important;
+    }
+  `;
+  document.head.appendChild(styleElement);
+}
+
+function removeDarkBackgroundStyle() {
+  const styleElement = document.getElementById("popup-dark-bg-style");
+  if (styleElement) {
+    styleElement.remove();
+  }
+}
 
 // @todo 7: Лайк карточки
 const likeCard = (likeButton) => {
@@ -75,6 +98,7 @@ function openPopup(buttonSelector, popupSelector) {
   button.addEventListener("click", () => {
     const popup = document.querySelector(popupSelector);
     popup.classList.add("popup_is-opened");
+    removeDarkBackgroundStyle();
     populateEditForm();
   });
 
@@ -84,6 +108,7 @@ function openPopup(buttonSelector, popupSelector) {
     if (event.key === "Escape") {
       const openPopups = document.querySelectorAll(".popup_is-opened");
       openPopups.forEach((popup) => {
+        removeDarkBackgroundStyle();
         popup.classList.remove("popup_is-opened");
       });
     }
@@ -100,6 +125,7 @@ openPopup(".profile__add-button", ".popup_type_new-card");
   closePopupButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const popup = button.closest(".popup");
+      removeDarkBackgroundStyle();
       popup.classList.remove("popup_is-opened");
     });
   });
@@ -109,6 +135,7 @@ openPopup(".profile__add-button", ".popup_type_new-card");
     const openedPopup = event.target.closest(".popup_is-opened");
 
     if (openedPopup && !event.target.closest(".popup__content")) {
+      removeDarkBackgroundStyle();
       openedPopup.classList.remove("popup_is-opened");
     }
   });
