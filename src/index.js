@@ -92,7 +92,6 @@ function openPopup(buttonSelector, popupSelector) {
 
 openPopup(".profile__edit-button", ".popup_type_edit");
 openPopup(".profile__add-button", ".popup_type_new-card");
-openPopup(".profile__image", ".popup_type_image");
 
 // Закрытие модального окна
 (function () {
